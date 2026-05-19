@@ -56,3 +56,20 @@ write_csv(airbnb_netejat, "data/listings_clean.csv")
 # 5. Recompte de control per comprovar l'oferta actual a la terminal
 airbnb_netejat %>%
   count(perfil_host)
+
+
+# --- PAS 3: AGRUPACIÓ PER DISTRICTES PER AL GRÀFIC DE BARRES ---
+
+districtes_agrupats <- airbnb_netejat %>%
+  group_by(neighbourhood_group_cleansed) %>%
+  summarise(
+    pressio_mitjana = mean(index_pressio, na.rm = TRUE),
+    total_allotjaments = n()
+  ) %>%
+  arrange(desc(pressio_mitjana))
+
+# Exportem aquest segon dataset específic i net
+write_csv(districtes_agrupats, "data/districtes_pressio.csv")
+
+# Mirem el resultat per terminal per comprovar que està perfecte
+print(districtes_agrupats)
